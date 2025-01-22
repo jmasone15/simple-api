@@ -43,6 +43,19 @@ router.get('/:email', async (req, res) => {
 
 router.post('/', async (req, res) => {
 	try {
+		const existingEmail = await BlackJackUser.findOne({
+			email: req.body.email
+		});
+		const existingNickname = await BlackJackUser.findOne({
+			nickname: req.body.nickname
+		});
+
+		if (existingEmail || existingNickname) {
+			return res
+				.status(400)
+				.json({ message: 'Email or Nickname already taken.' });
+		}
+
 		const newUser = new BlackJackUser({
 			nickname: req.body.nickname,
 			email: req.body.email
@@ -51,6 +64,24 @@ router.post('/', async (req, res) => {
 		await newUser.save();
 
 		return res.status(200).json(newUser);
+	} catch (error) {
+		console.error(error);
+		return res.status(500).send('Oops');
+	}
+});
+
+router.post('/login', async (req, res) => {
+	try {
+		const existingUser = await BlackJackUser.findOne({
+			nickname: req.body.nickname,
+			email: req.body.email
+		});
+
+		if (!existingUser) {
+			return res.status(401).json({ message: 'No user found.' });
+		}
+
+		return res.status(200).json(existingUser);
 	} catch (error) {
 		console.error(error);
 		return res.status(500).send('Oops');
