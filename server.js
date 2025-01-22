@@ -8,7 +8,7 @@ import blackjackUserRoutes from './routes/blackjackUserRoutes.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || '3001';
+const PORT = '3000';
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
