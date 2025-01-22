@@ -1,6 +1,11 @@
 import { Schema, model } from 'mongoose';
 
 const blackjackUserSchema = new Schema({
+	nickname: {
+		type: String,
+		required: true,
+		unique: true
+	},
 	email: {
 		type: String,
 		required: true,

@@ -9,7 +9,10 @@ router.get('/', async (req, res) => {
 		const limit = parseInt(req.query.limit) || 10;
 		const skip = (page - 1) * limit;
 
-		const user = await BlackJackUser.find({ active: true }, 'email money')
+		const user = await BlackJackUser.find(
+			{ active: true },
+			'nickname email money'
+		)
 			.skip(skip)
 			.limit(limit)
 			.sort('-money');
@@ -20,9 +23,17 @@ router.get('/', async (req, res) => {
 	}
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:email', async (req, res) => {
 	try {
-		const user = await BlackJackUser.findById(req.params.id);
+		const user = await BlackJackUser.find(
+			{ email: req.params.email },
+			'nickname email money'
+		);
+
+		if (!user) {
+			return res.status(400).send('No user found.');
+		}
+
 		return res.status(200).json(user);
 	} catch (error) {
 		console.error(error);
@@ -33,6 +44,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
 	try {
 		const newUser = new BlackJackUser({
+			nickname: req.body.nickname,
 			email: req.body.email
 		});
 
