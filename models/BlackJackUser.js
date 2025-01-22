@@ -6,11 +6,6 @@ const blackjackUserSchema = new Schema({
 		required: true,
 		unique: true
 	},
-	email: {
-		type: String,
-		required: true,
-		unique: true
-	},
 	money: {
 		type: Number,
 		default: 1000
