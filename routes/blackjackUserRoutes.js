@@ -20,6 +20,21 @@ router.get('/top-ten', async (req, res) => {
 	}
 });
 
+router.get('/user/:id', async (req, res) => {
+	try {
+		const existingUser = BlackJackUser.findById(req.params.id);
+
+		if (!existingUser) {
+			return res.status(400).json({ message: 'No user found.' });
+		}
+
+		return res.status(200).json(existingUser);
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json(error);
+	}
+});
+
 router.post('/login', async (req, res) => {
 	try {
 		const existingUser = await BlackJackUser.findOne({
