@@ -22,7 +22,7 @@ router.get('/top-ten', async (req, res) => {
 
 router.get('/user/:id', async (req, res) => {
 	try {
-		const existingUser = BlackJackUser.findById(req.params.id);
+		const existingUser = await BlackJackUser.findById(req.params.id);
 
 		if (!existingUser) {
 			return res.status(400).json({ message: 'No user found.' });
