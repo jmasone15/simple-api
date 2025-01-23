@@ -46,6 +46,8 @@ router.post('/login', async (req, res) => {
 				nickname: req.body.nickname
 			});
 
+			await newUser.save();
+
 			return res.status(200).json(newUser);
 		}
 
