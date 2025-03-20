@@ -75,7 +75,11 @@ router.put('/:id', async (req, res) => {
 	try {
 		const existingUser = await BlackJackUser.findById(req.params.id);
 
-		if (!existingUser || !req.body.money) {
+		if (
+			!existingUser ||
+			req.body.money === null ||
+			req.body.money === undefined
+		) {
 			return res.status(400).send('Bad Request');
 		}
 
