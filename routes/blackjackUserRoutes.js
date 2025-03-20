@@ -9,11 +9,24 @@ router.get('/top-ten', async (req, res) => {
 		const limit = parseInt(req.query.limit) || 10;
 		const skip = (page - 1) * limit;
 
-		const user = await BlackJackUser.find({ active: true }, 'nickname money')
+		const users = await BlackJackUser.find({ active: true }, 'nickname money')
 			.skip(skip)
 			.limit(limit)
 			.sort('-money');
-		return res.status(200).json(user);
+
+		let cleanedUsers = [];
+
+		for (let i = 0; i < users.length; i++) {
+			const newObj = {
+				rank: i + 1,
+				nickname: users[i].nickname,
+				money: users[i].money
+			};
+
+			cleanedUsers.push(newObj);
+		}
+
+		return res.status(200).json(cleanedUsers);
 	} catch (error) {
 		console.error(error);
 		return res.status(500).json(error);
