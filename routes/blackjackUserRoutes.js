@@ -89,7 +89,10 @@ router.put('/:id', async (req, res) => {
 			return res.status(400).send('Bad Request');
 		}
 
+		const moneyDiff = req.body.money - existingUser.money;
+
 		existingUser.money = req.body.money;
+		existingUser.total = existingUser.total + moneyDiff;
 		await existingUser.save();
 
 		return res.status(200).send('Success');
