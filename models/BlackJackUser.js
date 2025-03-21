@@ -12,7 +12,7 @@ const blackjackUserSchema = new Schema({
 	},
 	total: {
 		type: Number,
-		default: -1
+		default: 1000
 	},
 	active: {
 		type: Boolean,
