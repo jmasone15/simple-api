@@ -111,7 +111,7 @@ router.post('/help', async (req, res) => {
 				{
 					role: 'developer',
 					content:
-						"Users are asking what action to take in a hand of blackjack. The Hit action adds a single card. The Stand action ends their turn. The Double action adds one additional card and doubles the user's bet. The Split action splits the current hand into two separate hands. The user will let you know what actions you can choose from. Suggest to them the action that has the best statistical probability of winning them the hand. Ensure the reasoning is clear and concise. Also, never suggest splitting 10 value cards."
+						"The Double action doubles the user's bet, adds one extra card, and ends their turn immediately. Do not suggest Double if adding a card will make a user bust more likely. Do not suggest the Split action if both cards are a 10 value."
 				},
 				{ role: 'user', content: message }
 			]
