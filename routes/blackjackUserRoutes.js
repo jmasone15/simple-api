@@ -15,7 +15,7 @@ router.get('/top-ten', async (req, res) => {
 		const limit = parseInt(req.query.limit) || 10;
 		const skip = (page - 1) * limit;
 
-		const users = await BlackJackUser.find({ active: true }, 'nickname money')
+		const users = await BlackJackUser.find({ active: true }, 'nickname total')
 			.skip(skip)
 			.limit(limit)
 			.sort('-money');
@@ -26,7 +26,7 @@ router.get('/top-ten', async (req, res) => {
 			const newObj = {
 				rank: i + 1,
 				nickname: users[i].nickname,
-				money: users[i].money
+				total: users[i].total
 			};
 
 			cleanedUsers.push(newObj);
@@ -90,6 +90,25 @@ router.put('/:id', async (req, res) => {
 		}
 
 		existingUser.money = req.body.money;
+		await existingUser.save();
+
+		return res.status(200).send('Success');
+	} catch (error) {
+		console.error(error);
+		return res.status(500).send('Oops');
+	}
+});
+
+router.get('/more-money/:id', async (req, res) => {
+	try {
+		const existingUser = await BlackJackUser.findById(req.params.id);
+
+		if (!existingUser) {
+			return res.status(400).send('Bad Request');
+		}
+
+		existingUser.money = 1000;
+		existingUser.total = existingUser.total - 1000;
 		await existingUser.save();
 
 		return res.status(200).send('Success');
