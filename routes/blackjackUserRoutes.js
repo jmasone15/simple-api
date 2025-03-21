@@ -18,7 +18,7 @@ router.get('/top-ten', async (req, res) => {
 		const users = await BlackJackUser.find({ active: true }, 'nickname total')
 			.skip(skip)
 			.limit(limit)
-			.sort('-money');
+			.sort('-total');
 
 		let cleanedUsers = [];
 
