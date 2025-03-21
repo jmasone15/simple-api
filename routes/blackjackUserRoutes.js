@@ -1,7 +1,13 @@
 import BlackJackUser from '../models/BlackJackUser.js';
+import OpenAi from 'openai';
+import dotenv from 'dotenv';
 import { Router } from 'express';
 
+dotenv.config();
 const router = Router();
+const client = new OpenAi({
+	apiKey: process.env.OPENAI_API_KEY
+});
 
 router.get('/top-ten', async (req, res) => {
 	try {
@@ -87,6 +93,26 @@ router.put('/:id', async (req, res) => {
 		await existingUser.save();
 
 		return res.status(200).send('Success');
+	} catch (error) {
+		console.error(error);
+		return res.status(500).send('Oops');
+	}
+});
+
+router.post('/help', async (req, res) => {
+	try {
+		const { dealerCardValue, playerCardValues, actionArray } = req.body;
+
+		const message = `Hello, if I am playing blackjack and the dealer is showing a ${dealerCardValue}. My cards are [${playerCardValues}]. Right now, I can can take the following actions: [${actionArray}]. What is the best statistical play? Please format your response formatted as so: {"response": "ACTION", "reasoning": "..."}`;
+
+		const data = await client.chat.completions.create({
+			model: 'gpt-4o-mini',
+			messages: [{ role: 'user', content: message }]
+		});
+
+		const { response, reasoning } = JSON.parse(data.choices[0].message.content);
+
+		return res.json({ response, reasoning });
 	} catch (error) {
 		console.error(error);
 		return res.status(500).send('Oops');
