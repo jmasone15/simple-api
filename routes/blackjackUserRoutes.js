@@ -95,7 +95,9 @@ router.put('/:id', async (req, res) => {
 		existingUser.total = existingUser.total + moneyDiff;
 		await existingUser.save();
 
-		return res.status(200).send('Success');
+		return res
+			.status(200)
+			.json({ money: existingUser.money, total: existingUser.total });
 	} catch (error) {
 		console.error(error);
 		return res.status(500).send('Oops');
